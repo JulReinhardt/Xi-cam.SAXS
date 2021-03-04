@@ -142,9 +142,10 @@ setup(
             "z_integrate = xicam.SAXS.operations.zintegrate:z_integrate",
             "porod_plot = xicam.SAXS.operations.porod_plot:porod_plot",
             "guinier_plot = xicam.SAXS.operations.guinier_plot:guinier_plot",
-            "detector_mask = xicam.SAXS.masking.detector:detector_mask_plugin",
             "set_geometry = xicam.SAXS.operations.select_detector:set_geometry",
-            "set_detector = xicam.SAXS.operations.select_detector:set_detector"
+            "set_detector = xicam.SAXS.operations.select_detector:set_detector",
+            "detector_mask = xicam.SAXS.masking.detector:detector_mask_plugin",
+            "threshold_mask = xicam.SAXS.masking.threshold:threshold_mask"
         ],
         'xicam.plugins.Fittable1DModelPlugin': [
             'Gaussian1D = xicam.SAXS.models.gaussian1d:Gaussian1D'

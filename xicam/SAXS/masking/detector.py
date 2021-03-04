@@ -10,7 +10,8 @@ import numpy as np
 @describe_output("mask", "The calculated mask derived from the detector's profile. (1 is masked)")
 @output_names("mask")
 @categories(("Scattering", "Masking"))
-def detector_mask_plugin(azimuthal_integrator: AzimuthalIntegrator = None, mask:np.ndarray = None) -> np.ndarray:
+def detector_mask_plugin(azimuthal_integrator: AzimuthalIntegrator = None,
+                         mask: np.ndarray = None) -> np.ndarray:
     if azimuthal_integrator and azimuthal_integrator.detector:
         if mask is None:
             mask = np.zeros(azimuthal_integrator.detector.shape)

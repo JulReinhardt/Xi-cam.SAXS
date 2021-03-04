@@ -1,34 +1,38 @@
 import numpy as np
-from xicam.plugins import ProcessingPlugin, Input, InOut
 from scipy.ndimage import morphology
 
+from xicam.core.intents import OverlayIntent
+from xicam.plugins.operationplugin import operation, output_names, display_name, describe_input, describe_output, \
+    categories, intent, visible
 
-class ThresholdMaskPlugin(ProcessingPlugin):
-    name = 'Threshold Mask'
+@operation
+@display_name('Intensity Threshold')
+@describe_input('images', 'Frame image data')
+@describe_input('minimum', 'Threshold floor')
+@describe_input('maximum', 'Threshold ceiling')
+@describe_input('neighborhood', 'Neighborhood size in pixels for morphological opening. Only clusters of this size \
+                            that fail the threshold are masked')
+@intent(OverlayIntent, name='threshold', output_map={'image': 'threshold_mask'})
+@visible('images', False)
+@categories('Masking')
+#TODO add the other decorators
+def threshold_mask(images: np.ndarray,
+             minimum: int=None,
+             maximum: int=None,
+             neighborhood: int=2):
+    if minimum is None:
+        minimum = np.min(images)
+    if maximum is None:
+        maximum = np.max(images)
 
-    data = Input(description='Frame image data',
-                 type=np.ndarray)
-    minimum = Input(description='Threshold floor',
-                    type=int,
-                    default=3)
-    maximum = Input(description='Threshold ceiling',
-                    type=int,
-                    default=1e10)
-    neighborhood = Input(description='Neighborhood size in pixels for morphological opening. Only clusters of this size'
-                                     ' that fail the threshold are masked',
-                         type=int,
-                         default=2)
-    mask = InOut(description='Thresholded mask (1 is masked)',
-                 type=np.ndarray)
+    mask = np.logical_or(images < minimum, images > maximum)
 
-    def evaluate(self):
-        mask = np.logical_or(self.data.value < self.minimum.value, self.data.value > self.maximum.value)
+    y, x = np.ogrid[-neighborhood:neighborhood + 1,
+                    -neighborhood:neighborhood + 1]
+    kernel = x ** 2 + y ** 2 <= neighborhood ** 2
 
-        y, x = np.ogrid[-self.neighborhood.value:self.neighborhood.value + 1,
-               -self.neighborhood.value:self.neighborhood.value + 1]
-        kernel = x ** 2 + y ** 2 <= self.neighborhood.value ** 2
+    morphology.binary_opening(mask, kernel, output=mask)  # write-back to mask
+    if mask is not None:
+        mask = np.logical_or(mask, mask)  # .astype(np.int, copy=False)
+    return mask
 
-        morphology.binary_opening(mask, kernel, output=mask)  # write-back to mask
-        if self.mask.value is not None:
-            mask = np.logical_or(mask, self.mask.value)  # .astype(np.int, copy=False)
-        self.mask.value = mask
