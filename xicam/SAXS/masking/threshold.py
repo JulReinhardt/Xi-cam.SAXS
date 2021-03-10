@@ -12,18 +12,19 @@ from xicam.plugins.operationplugin import operation, output_names, display_name,
 @describe_input('maximum', 'Threshold ceiling')
 @describe_input('neighborhood', 'Neighborhood size in pixels for morphological opening. Only clusters of this size \
                             that fail the threshold are masked')
-@describe_output('mask', 'mask array for overlay')
+# @describe_output('mask', 'mask array for overlay')
 @describe_output('image', 'original image')
 @output_names('threshold_mask', 'images')
 #FIXME: What values in output_map?
-@intent(OverlayIntent, name='threshold', output_map={'image': 'images', 'mask': 'threshold_mask'})
+@intent(OverlayIntent, name='threshold', output_map={'image': 'threshold_mask'})
 @visible('images', False)
 @categories('Masking')
 #TODO add the other decorators
 def threshold_mask(images: np.ndarray,
              minimum: int=None,
              maximum: int=None,
-             neighborhood: int=2):
+             neighborhood: int=2,
+             opacity: float=0.3):
     if minimum is None:
         minimum = np.min(images)
     if maximum is None:
@@ -38,5 +39,5 @@ def threshold_mask(images: np.ndarray,
     morphology.binary_opening(threshold_mask, kernel, output=threshold_mask)  # write-back to mask
     if threshold_mask is not None:
         threshold_mask = np.logical_or(threshold_mask, threshold_mask)  # .astype(np.int, copy=False)
-    return threshold_mask, images
+    return threshold_mask
 
