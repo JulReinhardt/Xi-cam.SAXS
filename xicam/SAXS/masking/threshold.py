@@ -1,7 +1,7 @@
 import numpy as np
 from scipy.ndimage import morphology
 
-from xicam.core.intents import OverlayIntent
+from xicam.core.intents import OverlayIntent, ImageIntent
 from xicam.plugins.operationplugin import operation, output_names, display_name, describe_input, describe_output, \
     categories, intent, visible
 
@@ -17,14 +17,15 @@ from xicam.plugins.operationplugin import operation, output_names, display_name,
 @output_names('threshold_mask', 'images')
 #FIXME: What values in output_map?
 @intent(OverlayIntent, name='threshold', output_map={'image': 'threshold_mask'})
+@intent(ImageIntent, name='image', output_map={'image': 'images'})
 @visible('images', False)
 @categories('Masking')
 #TODO add the other decorators
 def threshold_mask(images: np.ndarray,
-             minimum: int=None,
-             maximum: int=None,
+             minimum: int=0,
+             maximum: int=1e3,
              neighborhood: int=2,
-             opacity: float=0.3):
+             opacity: float=0.5):
     if minimum is None:
         minimum = np.min(images)
     if maximum is None:
@@ -39,5 +40,5 @@ def threshold_mask(images: np.ndarray,
     morphology.binary_opening(threshold_mask, kernel, output=threshold_mask)  # write-back to mask
     if threshold_mask is not None:
         threshold_mask = np.logical_or(threshold_mask, threshold_mask)  # .astype(np.int, copy=False)
-    return threshold_mask
+    return threshold_mask, images
 
