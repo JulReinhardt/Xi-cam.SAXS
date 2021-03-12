@@ -13,7 +13,8 @@ from xicam.plugins.operationplugin import operation, output_names, display_name,
 @describe_input('neighborhood', 'Neighborhood size in pixels for morphological opening. Only clusters of this size \
                             that fail the threshold are masked')
 # @describe_output('mask', 'mask array for overlay')
-@describe_output('image', 'original image')
+@describe_output('images', 'original images')
+@describe_output('threshold_mask', 'threshold mask')
 @output_names('threshold_mask', 'images')
 #FIXME: What values in output_map?
 @intent(OverlayIntent, name='threshold', output_map={'image': 'threshold_mask'})
