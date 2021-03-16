@@ -25,8 +25,7 @@ from xicam.plugins.operationplugin import operation, output_names, display_name,
 def threshold_mask(images: np.ndarray,
              minimum: int=0,
              maximum: int=1e3,
-             neighborhood: int=2,
-             opacity: float=0.5):
+             neighborhood: int=2):
     if minimum is None:
         minimum = np.min(images)
     if maximum is None:
