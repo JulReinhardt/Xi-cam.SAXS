@@ -158,6 +158,8 @@ setup(
         ],
         "databroker.intents": [
             "SAXSImageIntent = xicam.SAXS.intents:SAXSImageIntent",
+            "SAXSOverlayIntent = xicam.SAXS.intents:SAXSOverlayIntent",
+
         ],
     },
 

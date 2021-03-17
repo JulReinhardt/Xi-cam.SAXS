@@ -1,4 +1,4 @@
-from xicam.core.intents import ImageIntent
+from xicam.core.intents import ImageIntent, OverlayIntent
 
 
 class SAXSImageIntent(ImageIntent):
@@ -10,11 +10,8 @@ class SAXSImageIntent(ImageIntent):
 
         self.geometry = None
 
-#TODO have a base overlay intent with mixin for SAXSintent
-# class OverlayIntent(SAXSImageIntent):
-#     canvas = "image_canvas"
-#     # def __init__(self, *args, opacity: float=0.2, mask: np.ndarray, **kwargs):
-#     def __init__(self, *args, opacity: float=0.2, **kwargs):
-#         super(OverlayIntent, self).__init__(*args, **kwargs)
-#         self.opacity = opacity
-#         # self.mask = mask
+
+class SAXSOverlayIntent(SAXSImageIntent, OverlayIntent):
+    pass
+
+

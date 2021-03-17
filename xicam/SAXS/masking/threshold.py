@@ -1,7 +1,8 @@
 import numpy as np
 from scipy.ndimage import morphology
 
-from xicam.core.intents import OverlayIntent, ImageIntent
+
+from xicam.SAXS.intents import SAXSOverlayIntent, SAXSImageIntent
 from xicam.plugins.operationplugin import operation, output_names, display_name, describe_input, describe_output, \
     categories, intent, visible
 
@@ -17,8 +18,8 @@ from xicam.plugins.operationplugin import operation, output_names, display_name,
 @describe_output('threshold_mask', 'threshold mask')
 @output_names('threshold_mask', 'images')
 #FIXME: What values in output_map?
-@intent(OverlayIntent, name='threshold', output_map={'image': 'threshold_mask'})
-@intent(ImageIntent, name='image', output_map={'image': 'images'})
+@intent(SAXSOverlayIntent, name='threshold', output_map={'image': 'threshold_mask'})
+@intent(SAXSImageIntent, name='image', output_map={'image': 'images'})
 @visible('images', False)
 @categories('Masking')
 #TODO add the other decorators
